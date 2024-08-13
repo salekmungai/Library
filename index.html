@@ -9,24 +9,26 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body class="bg-gray-100 p-6 font-inter">
-    <nav class="bg-gray-100 p-4">
-        <div class="flex items-center justify-between">
+    <header class="bg-gray-100 p-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between">
             <!-- Logo and Brand Name -->
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4 mb-4 sm:mb-0">
                 <img src="resource/logo.svg" alt="Logo" class="w-16 h-16">
                 <span class="text-4xl font-bold text-gray-700">MY LIBRARY</span>
             </div>
             
             <!-- Add Book Button -->
-            <button id="open-modal-btn"  class="bg-transparent hover:bg-gray-600 text-gray-700 font-bold hover:text-white py-2 px-4 border border-gray-900 hover:border-transparent rounded">
+            <button id="open-modal-btn" class="bg-transparent hover:bg-gray-600 text-gray-700 font-bold hover:text-white py-2 px-4 border border-gray-900 hover:border-transparent rounded">
                 Add Book
             </button>
         </div>
-    </nav>
+    </header>
 
-    <div class="container mx-auto">
-        <div id="modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <main class="container mx-auto mt-6">
+        <div id="modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden" aria-hidden="true" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md lg:max-w-lg">
+
                 <h2 class="text-2xl font-semibold mb-4">Add New Book</h2>
                 <form id="add-book-form">
                     <div class="mb-4">
@@ -42,6 +44,10 @@
                         <input type="number" id="pages" class="w-full p-2 border border-gray-300 rounded" required>
                     </div>
                     <div class="mb-4">
+                        <label for="imageUrl" class="block text-gray-700">Cover Page URL</label>
+                        <input type="url" id="imageUrl" class="w-full p-2 border border-gray-300 rounded" required>
+                    </div>
+                    <div class="mb-4">
                         <label for="read" class="block text-gray-700">Have You Read It?</label>
                         <select id="read" class="w-full p-2 border border-gray-300 rounded" required>
                             <option value="" disabled selected>Select an option</option>
@@ -54,15 +60,24 @@
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Book</button>
                     </div>
                 </form>
-                
             </div>
         </div>
+        
+        <div class="mb-6 flex flex-col sm:flex-row items-center justify-between">
+           
+            <input type="text" id="search-bar" placeholder="Search books..." class="p-2 border border-gray-300 rounded mb-4 sm:mb-0 sm:w-1/2" />
 
+           
+            <select id="filter-status" class="p-2 border border-gray-300 rounded">
+                <option value="">All</option>
+                <option value="yes">Read</option>
+                <option value="no">Unread</option>
+            </select>
+        </div>
 
-
-
-        <!-- Card Grid -->
         <div id="book-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
-    </div>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
