@@ -1,4 +1,3 @@
-// Book constructor
 function Book(title, author, pages, imageUrl, read) {
     this.title = title;
     this.author = author;
@@ -7,7 +6,6 @@ function Book(title, author, pages, imageUrl, read) {
     this.read = read;
 }
 
-// Sample books
 const books = [
     new Book("The Alchemist", "Paulo Coelho", 177, "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1654371463i/18144590.jpg", "yes"),
     new Book("To Kill a Mockingbird", "Harper Lee", 281, "https://m.media-amazon.com/images/I/51IXWZzlgSL._SY445_SX342_.jpg", "no"),
@@ -23,7 +21,9 @@ const books = [
     new Book("Atomic Habits", "James Clear", 320, "https://m.media-amazon.com/images/I/51-uspgqWIL._SY445_.jpg", "yes"),
 ];
 
-// Function to display books
+let editingIndex = -1;
+let bookToDeleteIndex = -1;
+
 function displayBooks(books) {
     const container = document.getElementById('book-container');
     container.innerHTML = '';
@@ -53,10 +53,9 @@ function displayBooks(books) {
         bookPages.innerText = `Pages: ${book.pages}`;
 
         const bookRead = document.createElement('p');
-        bookRead.className = 'inline-block mt-auto text-gray-700'; // Changed to gray
+        bookRead.className = 'inline-block mt-auto text-gray-700'; 
         bookRead.innerText = `Read: ${book.read}`;
 
-        // Edit and Delete buttons
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'flex justify-end space-x-2 mt-4';
 
@@ -66,9 +65,9 @@ function displayBooks(books) {
         editButton.onclick = () => openEditModal(index);
 
         const deleteButton = document.createElement('button');
-        deleteButton.className = 'bg-red-600 text-white px-2 py-1 rounded hover:bg-red-600';
+        deleteButton.className = 'bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700';
         deleteButton.innerText = 'Delete';
-        deleteButton.onclick = () => deleteBook(index);
+        deleteButton.onclick = () => openDeleteModal(index);
 
         buttonContainer.appendChild(editButton);
         buttonContainer.appendChild(deleteButton);
@@ -86,7 +85,6 @@ function displayBooks(books) {
     });
 }
 
-// Search and filter functionality
 function searchAndFilterBooks() {
     const searchTerm = document.getElementById('search-bar').value.toLowerCase();
     const filterStatus = document.getElementById('filter-status').value;
@@ -102,7 +100,6 @@ function searchAndFilterBooks() {
     displayBooks(filteredBooks);
 }
 
-// Open edit modal with pre-filled data
 function openEditModal(index) {
     const book = books[index];
     document.getElementById('title').value = book.title;
@@ -114,13 +111,25 @@ function openEditModal(index) {
     document.getElementById('modal').classList.remove('hidden');
 }
 
-// Delete a book
-function deleteBook(index) {
-    books.splice(index, 1);
-    searchAndFilterBooks(); // Update the displayed list
+function openDeleteModal(index) {
+    bookToDeleteIndex = index;
+    document.getElementById('delete-modal').classList.remove('hidden');
 }
 
-// Save changes from the edit modal
+function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.add('hidden');
+}
+
+document.getElementById('confirm-delete').addEventListener('click', () => {
+    if (bookToDeleteIndex >= 0) {
+        books.splice(bookToDeleteIndex, 1);
+        searchAndFilterBooks();
+        closeDeleteModal();
+    }
+});
+
+document.getElementById('cancel-delete').addEventListener('click', closeDeleteModal);
+
 function addBook(event) {
     event.preventDefault();
     
@@ -131,11 +140,9 @@ function addBook(event) {
     const read = document.getElementById('read').value;
 
     if (editingIndex >= 0) {
-        // Update existing book
         books[editingIndex] = new Book(title, author, pages, imageUrl, read);
         editingIndex = -1;
     } else {
-        // Add new book
         const newBook = new Book(title, author, pages, imageUrl, read);
         books.push(newBook);
     }
@@ -145,10 +152,9 @@ function addBook(event) {
     document.getElementById('modal').classList.add('hidden');
 }
 
-// Event listeners
 document.getElementById('add-book-form').addEventListener('submit', addBook);
 document.getElementById('open-modal-btn').addEventListener('click', () => {
-    editingIndex = -1; // Reset editing index for adding new book
+    editingIndex = -1; 
     document.getElementById('modal').classList.remove('hidden');
 });
 document.getElementById('close-modal-btn').addEventListener('click', () => {
@@ -157,5 +163,4 @@ document.getElementById('close-modal-btn').addEventListener('click', () => {
 document.getElementById('search-bar').addEventListener('input', searchAndFilterBooks);
 document.getElementById('filter-status').addEventListener('change', searchAndFilterBooks);
 
-// Initialize display
 searchAndFilterBooks();
